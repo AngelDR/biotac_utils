@@ -30,6 +30,7 @@ public:
   {
 
     std::string name_param;
+    ROS_INFO("Callback iniciado");
 
     for(int finger = 0; finger<5 ; finger++){
         switch (finger){
@@ -42,10 +43,13 @@ public:
         std::vector<double> vector_values;
         // valor electrodos -> vector
         for(int i=0; i<19; i++){
-           vector_values[i] = msg.tactiles[finger].electrodes[i];
+           vector_values.push_back(msg.tactiles[finger].electrodes[i]);
+           ROS_INFO("Anhadido valor al vector tactil");
         }  
+         
         // set param <- vector
         n.setParam(name_param,vector_values);
+        ROS_INFO("Param set");
     }
   }
 
@@ -56,7 +60,7 @@ int main(int argc, char **argv)
 {
   ros::init(argc, argv, "biotac_data_service");
   NodeClass* a = new NodeClass();
-  a->sub = a->n.subscribe("/tactile", 1000, &NodeClass::dataCallback,a);
+  a->sub = a->n.subscribe("/rh/tactile", 1000, &NodeClass::dataCallback,a);
   ros::spin();
   return 0;
 }
